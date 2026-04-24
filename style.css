@@ -1,0 +1,126 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg);
+    min-height: 100vh;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+section{
+    background-color: var(--card);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.summary-card div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.income{
+    color: var(--income);
+}
+.expense,#error-message{
+    color: var(--expense);
+}
+
+.input-group{
+    margin: 10px;
+}
+
+input,select{
+    margin: 10px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+button{
+    background-color: var(--button);
+    color: var(--text);
+    padding: 10px;
+    font-size: 20px;
+    margin: 10px;
+    border-radius: 15px;
+}
+
+button:hover{
+    transform: scale(1.05);
+}
+
+.filter-bar{
+    flex-direction: row;
+}
+
+.transaction{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.transaction div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.transaction div h3{
+    margin: auto 40px;
+}
+
+.edit,.del{
+    font-size: 16px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: rgb(181, 155, 10);
+}
+
+h1{
+    color: var(--text);
+    margin: 20px 10px;
+}
+
+h2{
+    color: var(--subtext);
+    margin: 20px 10px;
+}
+
+label,p{
+    color: var(--subtext);
+    font-size: 25px;
+}
+
+:root{   
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #e2e8f0;
+    --subtext: #94a3b8;
+    --income: #22c55e;
+    --expense: #ef4444;
+    --button: #2563eb;
+}
