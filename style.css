@@ -16,6 +16,7 @@ body{
     align-items: center;
     background-color: var(--bg);
     min-height: 100vh;
+    width: 100vw;
 }
 
 header{
@@ -47,6 +48,10 @@ section{
 }
 .expense,#error-message{
     color: var(--expense);
+}
+
+.not-show{
+    display: none;
 }
 
 .input-group{
