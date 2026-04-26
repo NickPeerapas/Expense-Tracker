@@ -78,6 +78,10 @@ button:hover{
     transform: scale(1.05);
 }
 
+.edit-mode{
+    background-color: rgb(181, 155, 10);
+}
+
 .filter-bar{
     flex-direction: row;
 }
