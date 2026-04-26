@@ -16,14 +16,14 @@ const transactions_listEl = document.querySelector(".transactions-list")
 
 let editMode = false
 let editElement_id = 0
+let selected_type = "all"
 
-renderUI(get_transactions())
-calculate_summary(get_transactions())
+renderApp()
 
 form.addEventListener("submit",(event)=>{
     event.preventDefault()
-    data = get_transactions()
-    newdata = create_transaction(data)
+    const data = get_transactions()
+    let newdata = create_transaction(data)
     if(!newdata) return
     if(editMode){
         newdata = edit_transaction(editElement_id,data,newdata)
@@ -31,18 +31,17 @@ form.addEventListener("submit",(event)=>{
         submit.classList.remove("edit-mode")
         submit.textContent = "Add Transaction"
     }
-    set_transactions(newdata)
-    renderUI(newdata)
-    calculate_summary(newdata)
+    save_transactions(newdata)
+    renderApp()
     titleEl.value = ""
     amountEl.value = ""
-    typeEl.value = "income"
+    typeEl.value = "expense"
     dateEl.value = ""
 })
 
 type_filter.addEventListener("change",(event)=>{
-    const type = event.target.value
-    filter_type(type)
+    selected_type = event.target.value
+    renderApp()
 })
 
 function add_errormessage(text){
@@ -72,7 +71,7 @@ function create_transaction(transactions){
     const transaction = {
         id:Date.now(),
         title:title,
-        amount:amount,
+        amount:Number(amount),
         type:type,
         date:date
     }
@@ -86,7 +85,7 @@ function create_transaction(transactions){
 function renderUI(data){
     transactions_listEl.innerHTML = "<h1>Transactions</h1>"
     data.forEach((transaction)=>{
-        transactionEl = document.createElement("div")
+        const transactionEl = document.createElement("div")
         if(transaction.type == "income"){
             transactionEl.classList.add("transaction","income")
         }
@@ -94,20 +93,18 @@ function renderUI(data){
              transactionEl.classList.add("transaction","expense")
         }
         transactionEl.innerHTML = `
+                <h3>${transaction.title}</h3>
+                <h3>${transaction.date}</h3>
+
+                <h3>${transaction.type == "income"? "Income":"Expense"}</h3>
+
+                
+                <h3>${transaction.amount}</h3>
                 <div>
-                    <h3>${transaction.title}</h3>
-                    <h3>${transaction.date}</h3>
+                    <button class="edit">Edit</button>
+                    <button class="del">Del</button>
                 </div>
-
-                <div><h3>${transaction.type == "income"? "Income":"Expense"}</h3></div>
-
-                <div>
-                    <h3>${transaction.amount}</h3>
-                    <div>
-                        <button class="edit">Edit</button>
-                        <button class="del">Del</button>
-                    </div>
-                </div>`
+                `
         const edit_btn = transactionEl.querySelector(".edit")
 
         edit_btn.addEventListener("click",()=>{
@@ -124,11 +121,10 @@ function renderUI(data){
         const del_btn = transactionEl.querySelector(".del")
 
         del_btn.addEventListener("click",()=>{
-            data = get_transactions()
-            newdata = delete_transaction(transaction.id,data)
-            set_transactions(newdata)
-            renderUI(newdata)
-            calculate_summary(newdata)
+            const data = get_transactions()
+            const newdata = delete_transaction(transaction.id,data)
+            save_transactions(newdata)
+            renderApp()
         })
 
         transactions_listEl.appendChild(transactionEl)
@@ -136,13 +132,14 @@ function renderUI(data){
 }
 
 function delete_transaction(id,data){
-    newdata = data.filter((item)=>item.id != id)
+    const newdata = data.filter((item)=>item.id != id)
     return newdata
 
 }
 
 function edit_transaction(id,data,newitem){
-    newdata = data.map((item)=>{
+    newitem.id = id
+    const newdata = data.map((item)=>{
         if(item.id === id){
             return newitem
         }else{
@@ -153,13 +150,13 @@ function edit_transaction(id,data,newitem){
 }
 
 function get_transactions(){
-    rawdata = localStorage.getItem("transactions")
+    const rawdata = localStorage.getItem("transactions")
     if (!rawdata) return []
-    data = JSON.parse(rawdata)
+    const data = JSON.parse(rawdata)
     return data
 }
 
-function set_transactions(data){
+function save_transactions(data){
     localStorage.setItem("transactions",JSON.stringify(data))
     return
 }
@@ -177,10 +174,15 @@ function calculate_summary(data){
 function filter_type(type){
     const mydata = get_transactions()
     if(type == "all"){
-        renderUI(mydata)
-        return
+        return mydata
     }
     const filtered_data = mydata.filter((item)=>item.type == type)
+    return filtered_data
+}
+
+function renderApp(){
+    const alldata = get_transactions()
+    const filtered_data = filter_type(selected_type)
+    calculate_summary(alldata)
     renderUI(filtered_data)
-    return
 }
